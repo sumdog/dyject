@@ -13,7 +13,7 @@ def ispy3():
 
 
 
-class context:
+class Context:
 
 
   def __init__(self):
@@ -58,11 +58,11 @@ class context:
         if opt.startswith('{'):
           arg = []
           for c in opt.strip('{}').split(','):
-            arg.append(__get_obj(c))
-        else:            
-          arg = self.__get_obj(opt)          
+            arg.append(self.get_class(c))
+        else:  
+          arg = self.get_class(opt)          
     else:
-      arg = type(ast.literal_eval(value)) #value
+      arg = ast.literal_eval(value) #value
     
     logging.debug('Setting attribute {0} to {1} for class {2}'.format(key,arg,object))
     setattr(object,key,arg)
@@ -77,7 +77,7 @@ class context:
     
         
   def get_class(self,idu,prototype=False):
-    if idu in self.loader_classes:
+    if idu in self.loader_classes and not prototype:
       logging.debug('Loading Cached Object ' + idu)
       return self.loader_classes[idu]
 
