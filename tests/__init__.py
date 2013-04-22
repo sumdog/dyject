@@ -105,3 +105,26 @@ class Tester:
     #status.append(( id(ctx.get_class('Foos',prototype=True)) != id(ctx.get_class('Foos',prototype=True))  , 'Create Two Prototypes'))
 
     self.write_test_results('Prototypes (non-singleton) Tests',status)
+
+    
+    status = []
+    
+    ssclass = ctx.get_class('TypesPartThreeTheReckoning')
+    
+    status.append(( ssclass.topvar == 'top' , 'Class Variable Test' ))
+    status.append(( ssclass.float == 5.0 , 'Parent Variable Test' ))
+    status.append(( ssclass.int_string == '4' , 'Grandparent Variable Test' ))
+    status.append(( isinstance(ssclass,tests.examples.SubSubInstance) , 'Class Instance Test' ))
+    status.append(( isinstance(ssclass,tests.examples.SubTypeInstance) , 'Parent Class Instance Test' ))
+    status.append(( isinstance(ssclass,tests.examples.TypeInstance) , 'Grandparent Class Instance Test' ))
+
+    status.append(( type(ssclass.bar) is list and 
+                    len(ssclass.bar) is 2 and
+                    isinstance(ssclass.bar[0],tests.examples.FooInstance) and
+                    isinstance(ssclass.bar[1],tests.examples.TypeInstance) ,
+                    'List of Objects in Parent Dependency Injection Test' ))
+
+
+    self.write_test_results('Third Subclass Tests',status)
+
+

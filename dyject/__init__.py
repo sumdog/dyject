@@ -17,14 +17,14 @@ class Context:
 
 
   def __init__(self):
-    
+    """Loads Python2/Python3 compatability, configuration parser
+       and removes case sensitivity from configuration reader"""
     if ispy3():
       import configparser
       self.config = configparser.RawConfigParser()
     else:
       import ConfigParser
       self.config = ConfigParser.RawConfigParser()
-
 
     #remove case insensitivity 
     self.config.optionxform = lambda option: option
@@ -36,6 +36,7 @@ class Context:
 
   def __get_obj(self,name):
     """
+    Dynmically loads Python class given fully qualified namespace
     http://stackoverflow.com/questions/547829/how-to-dynamically-load-a-python-class
     """
     components = name.split('.')
@@ -50,7 +51,7 @@ class Context:
       files = [ files ]
     self.config.read( files )
 
-  def set_args(self,object,key,value):
+  def __set_args(self,object,key,value):
     arg = None
     if '\\' in value:
       (optype,opt) = value.split('\\')
@@ -87,21 +88,30 @@ class Context:
     obj = self.__get_obj(name)
     logging.debug('Created Object {0} of type {1}'.format(idu,name))
   
-    #inherited 
-    #  to do this correctly we really want to roll up
-    #  and not down. This works for now. 
+
+    #inheritence - we want to set attributes from the bottom to the top
+    #  so we start with a top down list of all attribute tuples
+
     cur = idu
+    tree = []
     while(self.config.has_option(cur,'inherit')):
       cur = self.config.get(cur,'inherit')
-      for (skey,svalue) in self.config.items(cur):
+      tree.append(self.config.items(cur))
+
+    #reverse that list an apply them in bottom up order
+
+    tree.reverse()
+    for item in tree:
+      for (skey,svalue) in item:
         if skey != 'class' and skey != 'inherit':
-          self.set_args(obj,skey,svalue)        
-  
+          self.__set_args(obj,skey,svalue)
+
+    
     for (key,value) in bean:
       if key == 'class' or key == 'inherit':
         continue
       else:
-        self.set_args(obj,key,value)
+        self.__set_args(obj,key,value)
 
     if prototype == False:
       logging.debug("Caching Singleton object {0}".format(idu))

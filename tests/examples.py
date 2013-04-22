@@ -26,7 +26,7 @@ class FooInstance(object):
     object.__init__(self)
 
 
-class BarInstance(FooInstance):
+class SubSubInstance(SubTypeInstance):
 
   def __init__(self):
     object.__init__(self)
