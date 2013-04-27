@@ -20,13 +20,13 @@ from distutils.core import setup
 
 setup(
     name='dyject',
-    version='0.7',
+    version='0.7.2',
     packages=['dyject'],
     author='Sumit Khanna',
     author_email='sumit@penguindreams.org',
     url='http://dyject.com',
     license='Apache License 2.0',
-    long_description=open('README.md').read(),
+    long_description=open('README.txt').read(),
     classifiers=[
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
