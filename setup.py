@@ -26,7 +26,7 @@ setup(
     author_email='sumit@penguindreams.org',
     url='http://dyject.com',
     license='Apache License 2.0',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     classifiers=[
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
